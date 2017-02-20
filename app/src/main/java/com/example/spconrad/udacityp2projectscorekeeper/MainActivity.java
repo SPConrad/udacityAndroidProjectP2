@@ -31,7 +31,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+
         ///the textViews are nested within linearLayouts, so we must first get
         ///those layouts and then search for the textViews
         ///intialize the layout views
@@ -56,14 +58,15 @@ public class MainActivity extends AppCompatActivity {
         ///bit easier to manage
         changeButtons(false);
         changeExtraPointButtons(false);
+
     }
 
     private void changeButtons(boolean changeTo){
         ///this enables or disables the main scoring options when a team is selected
         /// or after a team has finished a scoring run
         fieldGoalButton.setEnabled(changeTo);
-        touchdownButton.setEnabled(changeTo);
         safetyButton.setEnabled(changeTo);
+        touchdownButton.setEnabled(changeTo);
     }
 
     private void changeResetButton(boolean changeTo){
@@ -79,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
 
         ///give them the ability to enter a failed extra point attempt
         if (changeTo == true){
+            fieldGoalButton.setEnabled(changeTo);
+            safetyButton.setEnabled(changeTo);
             touchdownButton.setText("Failed Extra Point Attempt");
             touchdownButton.setTag("0");
         } else

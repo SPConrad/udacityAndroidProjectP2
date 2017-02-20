@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginRight="8dp"
+                android:layout_marginRight="18dp"
                 android:text="0"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -65,51 +65,10 @@
                 android:id="@+id/team_1_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="18dp"
                 android:gravity="left"
                 android:text="0"
                 android:textSize="18sp" />
-
-            <!--<Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:onClick="gotFieldGoal"
-                android:tag="1"
-                android:text="Field Goal" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:onClick="gotTouchdown"
-                android:tag="1"
-                android:text="Touchdown" />
-
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:onClick="gotExtraPoint"
-                android:tag="1"
-                android:text="Extra Point" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:onClick="gotTwoPointConversion"
-                android:tag="1"
-                android:text="Two Point Conversion" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:onClick="causedSafety"
-                android:tag="1"
-                android:text="Safety" />/>-->
         </LinearLayout>
     </LinearLayout>
 
