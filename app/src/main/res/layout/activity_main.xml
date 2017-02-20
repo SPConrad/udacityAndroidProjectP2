@@ -24,7 +24,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:tag="team_0_tag">
+            android:clickable="true"
+            android:tag="0"
+            android:onClick="teamWasClicked">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -41,58 +43,16 @@
                 android:layout_marginRight="8dp"
                 android:text="0"
                 android:textSize="18sp" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:onClick="gotFieldGoal"
-                android:tag="0"
-                android:text="Field Goal" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:onClick="gotTouchdown"
-                android:tag="0"
-                android:text="Touchdown" />
-
-
-            <Button
-                android:id="@+id/extra_point"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:onClick="gotExtraPoint"
-                android:tag="0"
-                android:text="Extra Point" />
-
-            <Button
-                android:id="@+id/two_point_conversion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:onClick="gotTwoPointConversion"
-                android:tag="0"
-                android:text="Two Point Conversion" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:onClick="causedSafety"
-                android:tag="0"
-                android:text="Safety" />
         </LinearLayout>
 
-        <LinearLayout
+       <LinearLayout
             android:id="@+id/team_1_layout"
+            android:tag="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:tag="team_1_tag">
+           android:onClick="teamWasClicked">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -110,7 +70,7 @@
                 android:text="0"
                 android:textSize="18sp" />
 
-            <Button
+            <!--<Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -149,12 +109,58 @@
                 android:layout_gravity="center_horizontal"
                 android:onClick="causedSafety"
                 android:tag="1"
-                android:text="Safety" />/>
+                android:text="Safety" />/>-->
         </LinearLayout>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/field_goal_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:onClick="addPoints"
+        android:tag="3"
+        android:text="Field Goal" />
 
     <Button
+        android:id="@+id/touchdown_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:onClick="addPoints"
+        android:tag="6"
+        android:text="Touchdown" />
+
+
+    <Button
+        android:id="@+id/extra_point_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:onClick="addPoints"
+        android:tag="1"
+        android:text="Extra Point" />
+
+    <Button
+        android:id="@+id/two_point_conversion_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:onClick="addPoints"
+        android:tag="2"
+        android:text="Two Point Conversion" />
+
+    <Button
+        android:id="@+id/safety_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:onClick="addPoints"
+        android:tag="2"
+        android:text="Safety" />
+
+    <Button
+        android:id="@+id/reset_scores_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

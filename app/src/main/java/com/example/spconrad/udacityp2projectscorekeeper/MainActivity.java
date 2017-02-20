@@ -7,33 +7,26 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    int[] teams = new int[] {0, 0};
-    int safety = 2;
-    int fieldGoal = 3;
-    int touchDown = 6;
-    int extraPoint = 1;
-    int twoPointConversion = 2;
+    ///create a whole bunch of variables
+    ///int array to keep track of scores
+    int[] teams = new int[]{0, 0};
 
-    TextView team0ScoreTextView;
-    TextView team1ScoreTextView;
+    ///textview array for the score text views
+    TextView[] teamScoreTextViews = new TextView[2];
 
-    Button team0ExtraPoint;
-    Button team0TwoPointConversion;
-    Button team1ExtraPoint;
-    Button team1TwoPointConversion;
+    ///view arrays for the container layouts
+    View[] teamView = new View[2];
 
+    ///buttons!
+    Button fieldGoalButton;
+    Button touchdownButton;
+    Button safetyButton;
+    Button extraPointButton;
+    Button twoPointConversionButton;
+    Button resetButton;
+
+    ///current team at any given time
     int currentTeam = -1;
-
-    boolean[] teamClicked = new boolean[] {false, false};
-
-    /// The grander plan for this app would be to have a single row of buttons and
-    /// be able to select either team 0 or team 1, then the buttons would use
-    /// the parent tag/id to identify the team and assign the new points.
-    /// Additionally, I'd like to add a condition that requires a touchdown happen before an extra
-    /// point or two point conversion can be entered, but that's a bit complicated
-    /// for me at the moment and I believe not entirely necessary for the scope
-    /// of this project.
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,39 +34,125 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ///the textViews are nested within linearLayouts, so we must first get
         ///those layouts and then search for the textViews
-        View team0 = findViewById(R.id.team_0_layout);
-        View team1 = findViewById(R.id.team_1_layout);
+        ///intialize the layout views
+        teamView[0] = findViewById(R.id.team_0_layout);
+        teamView[1] = findViewById(R.id.team_1_layout);
 
         ///alright, we have found the necessary views, go in and get the textviews
         int team0id = getResources().getIdentifier("team_" + 0 + "_score", "id", getPackageName());
-        team0ScoreTextView = (TextView) team0.findViewById(team0id);
         int team1id = getResources().getIdentifier("team_" + 1 + "_score", "id", getPackageName());
-        team1ScoreTextView = (TextView) team1.findViewById(team1id);
+        teamScoreTextViews[0] = (TextView) teamView[0].findViewById(team0id);
+        teamScoreTextViews[1] = (TextView) teamView[1].findViewById(team1id);
 
-        team0ExtraPoint = (Button) team0.findViewById(R.id.extra_point);
-        team0TwoPointConversion = (Button) team0.findViewById(R.id.two_point_conversion);
+        ///find the buttons!!
+        extraPointButton = (Button) findViewById(R.id.extra_point_button);
+        twoPointConversionButton = (Button) findViewById(R.id.two_point_conversion_button);
+        fieldGoalButton = (Button) findViewById(R.id.field_goal_button);
+        touchdownButton = (Button) findViewById(R.id.touchdown_button);
+        safetyButton = (Button) findViewById(R.id.safety_button);
+        resetButton = (Button) findViewById(R.id.reset_scores_button);
 
-        team1ExtraPoint = (Button) team0.findViewById(R.id.extra_point);
-        team1TwoPointConversion = (Button) team0.findViewById(R.id.two_point_conversion);
-
-        team0ExtraPoint.setEnabled(false);
-        team0TwoPointConversion.setEnabled(false);
-
-        team1ExtraPoint.setEnabled(false);
-        team1TwoPointConversion.setEnabled(false);
+        ///disable the buttons. I do this here instead of in the XML as it is a
+        ///bit easier to manage
+        changeButtons(false);
+        changeExtraPointButtons(false);
     }
 
-    private void changeButtons(int team, boolean changeTo){
-        team0ExtraPoint.setEnabled(changeTo);
-        team0TwoPointConversion.setEnabled(changeTo);
+    private void changeButtons(boolean changeTo){
+        ///this enables or disables the main scoring options when a team is selected
+        /// or after a team has finished a scoring run
+        fieldGoalButton.setEnabled(changeTo);
+        touchdownButton.setEnabled(changeTo);
+        safetyButton.setEnabled(changeTo);
     }
 
-    /*public void teamClicked(View view){
-        currentTeam = getTeamNumber(view);
-        teamClicked[currentTeam] = true;
-    }*/
+    private void changeResetButton(boolean changeTo){
+        ///enable or disable the reset button if there are or are not any scores
+        resetButton.setEnabled(changeTo);
+    }
 
-    private int getTeamNumber(View view){
+    private void changeExtraPointButtons(boolean changeTo) {
+        ///enable the extra point buttons when a touch down is scored
+        ///and disable them after an extra point attempt is completed
+        extraPointButton.setEnabled(changeTo);
+        twoPointConversionButton.setEnabled(changeTo);
+
+        ///give them the ability to enter a failed extra point attempt
+        if (changeTo == true){
+            touchdownButton.setText("Failed Extra Point Attempt");
+            touchdownButton.setTag("0");
+        } else
+        {
+            ///and then reset it to standard touchdown afterwards
+            touchdownButton.setText("Touchdown");
+            touchdownButton.setTag("6");
+        }
+    }
+
+    private void teamUnClicked(){
+        ///clear out the changed values when a team is unselected/finishes its run
+        if (currentTeam != -1) {
+            teamView[currentTeam].setBackgroundColor(0xFFFFFF);
+            teamView[currentTeam].setClickable(true);
+            //changeButtons(false);
+            currentTeam = -1;
+            changeButtons(false);
+            changeExtraPointButtons(false);
+        }
+    }
+
+    public void teamWasClicked(View view) {
+        ///make things shiny and set variables when a team is selected
+        teamUnClicked();
+        currentTeam = getTag(view);
+
+        teamView[currentTeam].setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
+
+        teamView[currentTeam].setClickable(false);
+
+        changeButtons(true);
+    }
+    public void addPoints(View view) {
+        ///pretty straightforward
+        ///this if might not be strictly necessary but I like the extra protection
+        if (currentTeam == 0 || currentTeam == 1) {
+            int pointsToAdd = getTag(view);
+            teams[currentTeam] += pointsToAdd;
+
+            ///I'm not sure if two if statements are more or less expensive
+            ///than changing this to be enabled every time regardless, so
+            ///I'm just going to enable it every time
+            changeResetButton(true);
+
+            ///if it was a touch down, enable the extra point buttons
+            ///and disable the other buttons
+            if (pointsToAdd == 6){
+                changeExtraPointButtons(true);
+            } else {
+                teamUnClicked();
+            }
+
+            display();
+        }
+    }
+
+    private void display() {
+        ///rather than passing in the text view, just update them both at the same time.
+        ///obviously not viable for larger more complicated apps, but this is only
+        ///updating two text fields so it's fine for now
+        teamScoreTextViews[0].setText("" + teams[0]);
+        teamScoreTextViews[1].setText("" + teams[1]);
+    }
+
+    public void resetScores(View view) {
+        ///in a larger array this would be a for or forEach loop
+        teams[0] = 0;
+        teams[1] = 0;
+        display();
+        changeResetButton(false);
+    }
+
+    private int getTag(View view) {
         ///can't seem to get this to work by simply parseInt on the getTag, so
         ///first I cast it to a string and then convert it to an int.
         String s_team = (String) view.getTag();
@@ -81,56 +160,4 @@ public class MainActivity extends AppCompatActivity {
         return i_team;
     }
 
-    public void causedSafety(View view){
-        int team = getTeamNumber(view);
-        addPoints(team, safety);
-    }
-
-    public void gotFieldGoal(View view){
-        int team = getTeamNumber(view);
-        addPoints(team, fieldGoal);
-    }
-
-    public void gotTouchdown(View view){
-        int team = getTeamNumber(view);
-        changeButtons(team, true);
-        addPoints(team, touchDown);
-    }
-
-    public void gotExtraPoint(View view){
-        int team = getTeamNumber(view);
-        changeButtons(team, false);
-        addPoints(team, extraPoint);
-    }
-
-    public void gotTwoPointConversion(View view){
-        int team = getTeamNumber(view);
-        changeButtons(team, false);
-        addPoints(team, twoPointConversion);
-    }
-
-    public void resetScores(View view){
-        ///in a larger array this would be a for or forEach loop
-        teams[0] = 0;
-        teams[1] = 0;
-        display();
-    }
-
-    private void addPoints(int team, int score){
-        if (score != 0) {
-            teams[team] += score;
-        } else {
-            ///if the passed in number is a zero then you ought to reset it to 0
-            teams[team] = 0;
-        }
-        display();
-    }
-
-    private void display(){
-        ///rather than passing in the text view, just update them both at the same time.
-        ///obviously not viable for larger more complicated apps, but this is only
-        ///updating two text fields so it's fine for now
-        team0ScoreTextView.setText("" + teams[0]);
-        team1ScoreTextView.setText("" + teams[1]);
-    }
 }
